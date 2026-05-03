@@ -7,99 +7,63 @@ class Statistics {
   }
 
   findMean() {
-    let sum = 0;
-    for (let el of datas) {
-      sum += el;
-    }
-
+    let sum = this.datas.reduce((acc, el) => acc + el, 0);
     this.mean = sum / this.datas.length;
-    console.log("mean", this.mean);
+    console.log("Mean:", this.mean);
     return this.mean;
   }
 
   findMedian() {
-    let median = 0;
+    let arr = this.datas.sort((a, b) => a - b);
+    let half = Math.floor(arr.length / 2);
 
-    let arr = this.datas.sort((a,b) => a-b);
-    if(arr.length % 2 === 0) {
-      let order1 = arr[(arr.length / 2) - 1]
-      let order2 = arr[arr.length / 2];
-
-      median = (order1 + order2) / 2;
-
+    if (arr.length % 2 === 0) {
+      this.median = (arr[half - 1] + arr[half]) / 2;
     } else {
-      let order = ((arr.length + 1) / 2) - 1;
-      median = arr[order];
+      this.median = arr[half];
     }
-
-    this.median = median;
     console.log("median", this.median);
+    return this.median;
   }
 
   findMode() {
-    let maxVal;
-
     let occurence = this.datas.reduce((acc, el) => {
       if (acc.hasOwnProperty(el)) acc[el]++;
       else acc[el] = 1;
       return acc;
     }, {});
 
-    let maxCount = Object.values(occurence).reduce((prev, cur) =>
-      Math.max(prev, cur),
-    );
+    let maxCount = Math.max(...Object.values(occurence));
 
     if (maxCount === 1) {
-      maxVal = this.datas.join(", ");
+      this.mode = this.datas.join(", ");
     } else {
-      maxVal = Number(
+      this.mode = Number(
         Object.keys(occurence).find((key) => occurence[key] === maxCount),
       );
     }
-    console.log("mode", maxVal);
-    return maxVal;
-  }
-  /* Type is either sample or population */
-  stdOrVarianceFilter(type, typeOfOperation) {
-    let std;
-    let variance;
-    let sum = 0;
-
-    for (let el of this.datas) {
-      sum += Math.pow(el - this.mean, 2);
-    }
-
-    if (type === "sample") {
-      std = Math.sqrt(sum / (this.datas.length - 1));
-    } else if (type === "population") {
-      std = Math.sqrt(sum / this.datas.length);
-    } else {
-      console.error(
-        "Undefined type ",
-        type,
-        " type must be either sample or population",
-      );
-    }
-    if (typeOfOperation === "variance") {
-      variance = Math.pow(std, 2);
-      console.log("var", variance);
-      return variance;
-    } else {
-      console.log("std", std);
-      return std;
-    }
+    console.log("mode", this.mode);
+    return this.mode;
   }
 
   variance(type) {
-    this.stdOrVarianceFilter(type, "variance");
+    let sum = this.datas.reduce(
+      (acc, cur) => acc + Math.pow(cur - this.mean, 2),
+      0,
+    );
+    let divisor = type === "sample" ? this.datas.length - 1 : this.datas.length;
+    return sum / divisor;
   }
 
   stdDeviation(type) {
-    this.stdOrVarianceFilter(type, "standard deviation");
+    let variance = this.variance(type);
+    let std = Math.sqrt(variance);
+    console.log("std deviation", std);
+    return std;
   }
 
   shapeOfDistribution() {
-    if ((this.mean === this.median) === this.mode) {
+    if (this.mean === this.mode && this.median === this.mode) {
       console.log("Symmetric Distribution");
     } else if (this.median < this.mean) {
       console.log("Right Skewed Distribution");
@@ -109,11 +73,11 @@ class Statistics {
   }
 }
 
-let datas = [5, 10, 25, 35, 100];
+let datas = [5, 10, 25, 30, 12];
 const stat = new Statistics(datas);
 
 stat.findMean();
 stat.findMedian();
 stat.findMode();
-stat.variance("sample");
+stat.stdDeviation("sample");
 stat.shapeOfDistribution();
