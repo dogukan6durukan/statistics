@@ -18,10 +18,22 @@ class Statistics {
   }
 
   findMedian() {
-    // (n + 1) / 2
-    this.median = (this.datas.length + 1) / 2;
+    let median = 0;
+
+    let arr = this.datas.sort((a,b) => a-b);
+    if(arr.length % 2 === 0) {
+      let order1 = arr[(arr.length / 2) - 1]
+      let order2 = arr[arr.length / 2];
+
+      median = (order1 + order2) / 2;
+
+    } else {
+      let order = ((arr.length + 1) / 2) - 1;
+      median = arr[order];
+    }
+
+    this.median = median;
     console.log("median", this.median);
-    return this.median;
   }
 
   findMode() {
@@ -44,6 +56,7 @@ class Statistics {
         Object.keys(occurence).find((key) => occurence[key] === maxCount),
       );
     }
+    console.log("mode", maxVal);
     return maxVal;
   }
   /* Type is either sample or population */
@@ -96,11 +109,11 @@ class Statistics {
   }
 }
 
-let datas = [2, 3, 3, 4];
+let datas = [5, 10, 25, 35, 100];
 const stat = new Statistics(datas);
 
 stat.findMean();
 stat.findMedian();
 stat.findMode();
-stat.variance("population");
+stat.variance("sample");
 stat.shapeOfDistribution();
