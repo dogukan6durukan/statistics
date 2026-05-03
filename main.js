@@ -4,6 +4,7 @@ class Statistics {
     this.mean = 0;
     this.median = 0;
     this.mode = 0;
+    this.std = 0;
   }
 
   findMean() {
@@ -58,8 +59,21 @@ class Statistics {
   stdDeviation(type) {
     let variance = this.variance(type);
     let std = Math.sqrt(variance);
+    this.std = std;
     console.log("std deviation", std);
-    return std;
+    return this.std;
+  }
+
+  findRange() {
+    const max = Math.max(...this.datas);
+    const min = Math.min(...this.datas);
+    return { max : max, min : min, range : max - min };
+  }
+
+  coeffOfVariation() {
+    let coeff = (this.std / this.mean) * 100;
+    console.log("Coefficent of variation is: ", coeff);
+    return coeff;
   }
 
   shapeOfDistribution() {
@@ -80,4 +94,5 @@ stat.findMean();
 stat.findMedian();
 stat.findMode();
 stat.stdDeviation("sample");
+stat.coeffOfVariation();
 stat.shapeOfDistribution();
