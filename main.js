@@ -7,10 +7,15 @@ class Statistics {
     this.std = 0;
   }
 
+  init() {
+    this.findMean();
+    this.findMedian();
+    this.findMode();
+  }
+
   findMean() {
     let sum = this.datas.reduce((acc, el) => acc + el, 0);
     this.mean = sum / this.datas.length;
-    console.log("Mean:", this.mean);
     return this.mean;
   }
 
@@ -23,7 +28,6 @@ class Statistics {
     } else {
       this.median = arr[half];
     }
-    console.log("median", this.median);
     return this.median;
   }
 
@@ -43,16 +47,21 @@ class Statistics {
         Object.keys(occurence).find((key) => occurence[key] === maxCount),
       );
     }
-    console.log("mode", this.mode);
     return this.mode;
   }
 
   variance(type) {
+    this.init();
     let sum = this.datas.reduce(
       (acc, cur) => acc + Math.pow(cur - this.mean, 2),
       0,
     );
-    let divisor = type === "sample" ? this.datas.length - 1 : this.datas.length;
+    let divisor =
+      type === "sample"
+        ? this.datas.length - 1
+        : type === "population"
+          ? this.datas.length
+          : console.error("Undefined type: ", '"'+type+'"');
     return sum / divisor;
   }
 
@@ -60,39 +69,37 @@ class Statistics {
     let variance = this.variance(type);
     let std = Math.sqrt(variance);
     this.std = std;
-    console.log("std deviation", std);
     return this.std;
   }
 
   findRange() {
     const max = Math.max(...this.datas);
     const min = Math.min(...this.datas);
-    return { max : max, min : min, range : max - min };
+    return { max: max, min: min, range: max - min };
   }
 
   coeffOfVariation() {
+    this.init();
+    this.stdDeviation("sample");
     let coeff = (this.std / this.mean) * 100;
-    console.log("Coefficent of variation is: ", coeff);
     return coeff;
   }
 
   shapeOfDistribution() {
+    this.init();
+    let result;
     if (this.mean === this.mode && this.median === this.mode) {
       console.log("Symmetric Distribution");
+      result = "symmetric";
     } else if (this.median < this.mean) {
       console.log("Right Skewed Distribution");
+      result = "right-skewed";
     } else {
       console.log("Left Skewed Distribution");
+      result = "left-skewed";
     }
+    return result;
   }
 }
 
-let datas = [5, 10, 25, 30, 12];
-const stat = new Statistics(datas);
-
-stat.findMean();
-stat.findMedian();
-stat.findMode();
-stat.stdDeviation("sample");
-stat.coeffOfVariation();
-stat.shapeOfDistribution();
+export { Statistics };
