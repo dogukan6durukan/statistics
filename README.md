@@ -11,10 +11,10 @@ Features:
 - Range
 - Coefficent of Variation
 - Shape of Distribution (Symmetric, Rigth Skewed or Left Skewed)
+- Z-Score
 
-You can use this in your browser or computer environment.
+You can use this project in your browser or computer environment.
 
 To do list:
-- Z-Score
 - Find Quartiles
 - Find Outliers (Upper bound, Lower bound)

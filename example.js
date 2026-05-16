@@ -10,8 +10,10 @@ console.log(mean);
 let std = stat.stdDeviation("sample"); // 10.5971
 console.log(std);
 
-let coeff = stat.coeffOfVariation(); 
+let coeff = stat.coeffOfVariation();
 console.log(coeff); // 64.6168
 
-stat.shapeOfDistribution(); // Right skewed
+let z_score = stat.z_score(35);
+console.log(z_score); // 1.75
 
+stat.shapeOfDistribution(); // Right skewed

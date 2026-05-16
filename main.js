@@ -61,7 +61,7 @@ class Statistics {
         ? this.datas.length - 1
         : type === "population"
           ? this.datas.length
-          : console.error("Undefined type: ", '"'+type+'"');
+          : console.error("Undefined type: ", '"' + type + '"');
     return sum / divisor;
   }
 
@@ -99,6 +99,13 @@ class Statistics {
       result = "left-skewed";
     }
     return result;
+  }
+
+  z_score(val) {
+    this.init();
+    this.stdDeviation("sample");
+    let z_formula = (val - this.mean) / this.std;
+    return z_formula;
   }
 }
 
